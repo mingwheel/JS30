@@ -11,6 +11,7 @@
 
   <div class="clock">
     <div class="clock-face">
+      <div class="clock-center"></div>
       <div class="hand hour-hand"></div>
       <div class="hand min-hand"></div>
       <div class="hand second-hand"></div>
@@ -59,6 +60,17 @@
       /* account for the height of the clock hands */
     }
 
+    .clock-center {
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background: white;
+      top: 148px;
+      left: 145px;
+      z-index: 2;
+    }
+
     .hand {
       width: 50%;
       height: 6px;
@@ -68,6 +80,17 @@
       transform-origin: 100%;
       transition: transform 0.1s;
       transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+    }
+
+    .second-hand {
+      background: white;
+      z-index: 2;
+    }
+    .hour-hand {
+      background: #111111;
+      width: 33%;
+      left: 17%;
+      z-index: 1;
     }
   </style>
 
@@ -85,6 +108,9 @@
       const minutesDeg = ((minutes / 60) * 360) + 90;
       const hoursDeg = ((hours / 12) * 360) + 90;
 
+      if (secondsDeg === 90) {
+        secondHand.style.transition = "none";
+      }
       secondHand.style.transform = `rotate(${secondsDeg}deg)`;
       minuteHand.style.transform = `rotate(${minutesDeg}deg`;
       hourHand.style.transform = `rotate(${hoursDeg}deg`;
