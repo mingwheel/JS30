@@ -12,9 +12,9 @@
   <div class="clock">
     <div class="clock-face">
       <div class="clock-center"></div>
-      <div class="hand hour-hand"></div>
-      <div class="hand min-hand"></div>
-      <div class="hand second-hand"></div>
+      <div class="hand hour-hand hand-movement"></div>
+      <div class="hand min-hand hand-movement"></div>
+      <div class="hand second-hand hand-movement"></div>
     </div>
   </div>
 
@@ -78,10 +78,11 @@
       position: absolute;
       top: 50%;
       transform-origin: 100%;
+    }
+    .hand-movement {
       transition: transform 0.1s;
       transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
-
     .second-hand {
       background: white;
       z-index: 2;
@@ -95,25 +96,32 @@
   </style>
 
   <script>
-    const secondHand = document.querySelector(".second-hand");
-    const minuteHand = document.querySelector(".min-hand");
-    const hourHand = document.querySelector(".hour-hand");
+    const hand = {
+      second: document.querySelector(".second-hand"),
+      minute: document.querySelector(".min-hand"),
+      hour: document.querySelector(".hour-hand")
+    }
 
     function setDate() {
       const now = new Date();
       const seconds = now.getSeconds();
       const minutes = now.getMinutes();
       const hours = now.getHours();
-      const secondsDeg = ((seconds / 60) * 360) + 90;
-      const minutesDeg = ((minutes / 60) * 360) + 90;
-      const hoursDeg = ((hours / 12) * 360) + 90;
-
-      if (secondsDeg === 90) {
-        secondHand.style.transition = "none";
+      const deg = {
+        second: ((seconds / 60) * 360) + 90,
+        minute: ((minutes / 60) * 360) + 90,
+        hour: ((hours / 12) * 360) + 90
       }
-      secondHand.style.transform = `rotate(${secondsDeg}deg)`;
-      minuteHand.style.transform = `rotate(${minutesDeg}deg`;
-      hourHand.style.transform = `rotate(${hoursDeg}deg`;
+      for (let type in deg) {
+        if (deg[type] === 90) {
+          hand[type].classList.remove("hand-movement");
+        } else if (!hand[type].classList.contains("hand-movement")) {
+          hand[type].classList.add("hand-movement");
+        }
+      }
+      hand.second.style.transform = `rotate(${deg.second}deg)`;
+      hand.minute.style.transform = `rotate(${deg.minute}deg`;
+      hand.hour.style.transform = `rotate(${deg.hour}deg`;
     }
     setInterval(setDate, 1000);
   </script>
